@@ -64,14 +64,27 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
+        if: github.ref == 'refs/heads/master'
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: kafka-ui-api
-          push: github.ref == 'refs/heads/master'
+          push: true
           tags: provectuslabs/kafka-ui:${{ steps.prep.outputs.version }}
           build-args: |
             JAR_FILE=kafka-ui-api-${{ steps.prep.outputs.version }}.jar
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.prep.outputs.version }}
+          release_name: Release ${{ steps.prep.outputs.version }}
+          body: |
+            :tada:
+          draft: false
+          prerelease: false
