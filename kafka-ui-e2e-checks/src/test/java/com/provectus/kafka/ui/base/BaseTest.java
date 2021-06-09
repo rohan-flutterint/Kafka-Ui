@@ -1,5 +1,7 @@
 package com.provectus.kafka.ui.base;
 
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.provectus.kafka.ui.pages.Pages;
@@ -7,6 +9,8 @@ import com.provectus.kafka.ui.screenshots.Screenshooter;
 import com.provectus.kafka.ui.steps.Steps;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.qameta.allure.selenide.AllureSelenide;
+import java.io.File;
+import java.util.Arrays;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
@@ -16,9 +20,6 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import java.io.File;
-import java.util.Arrays;
-
 @Slf4j
 @DisplayNameGeneration(CamelCaseToSpacedDisplayNameGenerator.class)
 public class BaseTest {
@@ -26,7 +27,7 @@ public class BaseTest {
   protected Steps steps = Steps.INSTANCE;
   protected Pages pages = Pages.INSTANCE;
 
-  private Screenshooter screenshooter = new Screenshooter();
+  private final Screenshooter screenshooter = new Screenshooter();
 
   public void compareScreenshots(String name) {
     screenshooter.compareScreenshots(name);
@@ -40,12 +41,16 @@ public class BaseTest {
       new GenericContainer(DockerImageName.parse("aerokube/selenoid:latest-release"))
           .withExposedPorts(4444)
           .withFileSystemBind("selenoid/config/", "/etc/selenoid", BindMode.READ_WRITE)
-          .withFileSystemBind("/var/run/docker.sock", "/var/run/docker.sock", BindMode.READ_WRITE)
-          .withFileSystemBind("selenoid/video", "/opt/selenoid/video", BindMode.READ_WRITE)
+          .withFileSystemBind("/var/run/docker.sock",
+              "/var/run/docker.sock", BindMode.READ_WRITE)
+          .withFileSystemBind("selenoid/video",
+              "/opt/selenoid/video", BindMode.READ_WRITE)
           .withFileSystemBind("selenoid/logs", "/opt/selenoid/logs", BindMode.READ_WRITE)
-          .withEnv("OVERRIDE_VIDEO_OUTPUT_DIR", "/opt/selenoid/video")
+          .withEnv("OVERRIDE_VIDEO_OUTPUT_DIR",
+              "/opt/selenoid/video")
           .withCommand(
-              "-conf", "/etc/selenoid/browsers.json", "-log-output-dir", "/opt/selenoid/logs");
+              "-conf", "/etc/selenoid/browsers.json",
+              "-log-output-dir", "/opt/selenoid/logs");
 
   static {
     if (new File("./.env").exists()) {
@@ -98,11 +103,12 @@ public class BaseTest {
     File allureResults = new File(TestConfiguration.REPORTS_FOLDER);
     if (allureResults.isDirectory()) {
       File[] list = allureResults.listFiles();
-      if (list != null)
+      if (list != null) {
         Arrays.stream(list)
             .sequential()
             .filter(e -> !e.getName().equals("categories.json"))
             .forEach(File::delete);
+      }
     }
   }
 }

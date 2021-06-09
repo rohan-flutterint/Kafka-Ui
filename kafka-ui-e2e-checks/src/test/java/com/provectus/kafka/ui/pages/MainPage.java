@@ -1,5 +1,7 @@
 package com.provectus.kafka.ui.pages;
 
+import static com.codeborne.selenide.Selenide.$;
+
 import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
 import lombok.SneakyThrows;

@@ -6,7 +6,6 @@
     <modules>
         <module>kafka-ui-contract</module>
 		<module>kafka-ui-api</module>
-		<module>kafka-ui-e2e-checks</module>
 	</modules>
 
 	<properties>
@@ -59,6 +58,39 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>8.32</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<violationSeverity>warning</violationSeverity>
+							<failOnViolation>true</failOnViolation>
+							<failsOnError>true</failsOnError>
+							<includeTestSourceDirectory>true</includeTestSourceDirectory>
+							<configLocation>file:${basedir}/../etc/checkstyle/checkstyle.xml</configLocation>
+							<headerLocation>file:${basedir}/../etc/checkstyle/apache-header.txt</headerLocation>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 	<groupId>com.provectus</groupId>
 	<artifactId>kafka-ui</artifactId>
 	<version>0.0.11-SNAPSHOT</version>

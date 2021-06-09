@@ -1,10 +1,10 @@
 package com.provectus.kafka.ui.base;
 
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.platform.commons.util.ClassUtils;
 import org.junit.platform.commons.util.Preconditions;
 
-import java.lang.reflect.Method;
 
 public class CamelCaseToSpacedDisplayNameGenerator implements DisplayNameGenerator {
   @Override
