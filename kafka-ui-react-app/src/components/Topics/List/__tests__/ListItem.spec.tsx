@@ -22,6 +22,8 @@ describe('ListItem', () => {
       topic={internalTopicPayload}
       deleteTopic={mockDelete}
       clusterName={clusterName}
+      isSelecting={false}
+      addToSelected={(name: string) => {}}
       clearTopicMessages={mockDeleteMessages}
       {...props}
     />

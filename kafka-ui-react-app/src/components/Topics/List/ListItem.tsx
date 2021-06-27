@@ -15,6 +15,8 @@ export interface ListItemProps {
   topic: TopicWithDetailedInfo;
   deleteTopic: (clusterName: ClusterName, topicName: TopicName) => void;
   clusterName: ClusterName;
+  addToSelected: (name: string) => void;
+  isSelecting: boolean;
   clearTopicMessages(topicName: TopicName, clusterName: ClusterName): void;
 }
 

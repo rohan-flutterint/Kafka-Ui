@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TopicWithDetailedInfo,
   ClusterName,
@@ -52,7 +52,6 @@ const List: React.FC<Props> = ({
   const { isReadOnly } = React.useContext(ClusterContext);
   const { clusterName } = useParams<{ clusterName: ClusterName }>();
   const { page, perPage } = usePagination();
-
   React.useEffect(() => {
     fetchTopicsList({
       clusterName,
@@ -64,6 +63,12 @@ const List: React.FC<Props> = ({
   }, [fetchTopicsList, clusterName, page, perPage, orderBy, search]);
 
   const [showInternal, setShowInternal] = React.useState<boolean>(true);
+  const [isSelecting, setIsSelecting] = useState<boolean>(false);
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const addToSelected = (name: string) => {
+    setSelected([...selected, name]);
+  };
 
   const handleSwitch = React.useCallback(() => {
     setShowInternal(!showInternal);
@@ -98,14 +103,31 @@ const List: React.FC<Props> = ({
               value={search}
             />
           </div>
-          <div className="column is-2 is-justify-content-flex-end is-flex">
+          <div className="column is-3 is-justify-content-flex-end is-flex">
             {!isReadOnly && (
-              <Link
-                className="button is-primary"
-                to={clusterTopicNewPath(clusterName)}
-              >
-                Add a Topic
-              </Link>
+              <div>
+                {isSelecting && (
+                  <input
+                    className="button"
+                    style={{ marginRight: 5 }}
+                    type="button"
+                    value="Delete"
+                  />
+                )}
+                <input
+                  className="button is-primary"
+                  style={{ marginRight: 5 }}
+                  onClick={() => setIsSelecting((value) => !value)}
+                  type="button"
+                  value={isSelecting ? 'Stop selecting' : 'Select'}
+                />
+                <Link
+                  className="button is-primary"
+                  to={clusterTopicNewPath(clusterName)}
+                >
+                  Add a Topic
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -146,6 +168,8 @@ const List: React.FC<Props> = ({
                   key={topic.name}
                   topic={topic}
                   deleteTopic={deleteTopic}
+                  addToSelected={addToSelected}
+                  isSelecting={isSelecting}
                   clearTopicMessages={clearTopicMessages}
                 />
               ))}
