@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka-ui-contract</module>
+        <module>webflux-saml2</module>
         <module>kafka-ui-api</module>
         <module>kafka-ui-e2e-checks</module>
     </modules>
