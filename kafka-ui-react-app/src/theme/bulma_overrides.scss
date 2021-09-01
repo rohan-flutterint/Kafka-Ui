@@ -85,3 +85,16 @@
 .is-size-8 {
   font-size: $size-8;
 }
+
+.button {
+  &:hover {
+    background-color: #E3E6E8;
+  }
+  &:active {
+    background-color: #D5DADD;
+  }
+  &:disabled {
+    background-color: #F1F2F3;
+    color: #ABB5BA;
+  }
+}
